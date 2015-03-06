@@ -1,4 +1,8 @@
 package game1;
+import javalib.funworld.*;
+import javalib.worldcanvas.*;
+import javalib.worldimages.*;
+import tester.*;
 
 public class Player {
 
@@ -9,11 +13,13 @@ public class Player {
     }
 
     public Player movePlayerLeft() {
-        return new Player(position.x - 5, position.y);
+        Posn lefty = new Posn(position.x - 5, position.y);
+        return new Player(lefty);
     }
 
     public Player movePlayerRight() {
-        return new Player(position.x + 5, position.y);
+        Posn righty = new Posn(position.x + 5, position.y);
+        return new Player(righty);
     }
 
     public Boolean atLeftHuh() {

@@ -1,5 +1,7 @@
 package game1;
 import javalib.funworld.*;
+import javalib.worldcanvas.*;
+import javalib.worldimages.*;
 import tester.*;
 
 public class Balloon {
@@ -15,9 +17,12 @@ public class Balloon {
     }
     
     public Balloon moveBalloonDown(){
-        return new Balloon(position.x, position.y+10);
+        Posn downsy = new Posn(position.x, position.y+10);
+        return new Balloon(downsy);
     }
     
-    
+    public void removeBalloon(Balloon b){
+        
+    }
     
 }
