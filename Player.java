@@ -6,20 +6,20 @@ import tester.*;
 
 public class Player {
 
-    Posn position;
+    static Posn position = new Posn(250, 800);
 
-    Player(Posn position) {
-        this.position = position;
+    Player(Posn p) {
+        this.position = p;
     }
 
     public Player movePlayerLeft() {
-        Posn lefty = new Posn(position.x - 5, position.y);
-        return new Player(lefty);
+        position = new Posn(position.x - 5, position.y);
+        return new Player(position);
     }
 
     public Player movePlayerRight() {
-        Posn righty = new Posn(position.x + 5, position.y);
-        return new Player(righty);
+        position = new Posn(position.x + 5, position.y);
+        return new Player(position);
     }
 
     public Boolean atLeftHuh() {
@@ -30,4 +30,7 @@ public class Player {
         return this.position.x == 500;
     }
 
+    public WorldImage drawPlayer() {
+       
+    }
 }

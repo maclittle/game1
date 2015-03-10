@@ -6,23 +6,22 @@ import tester.*;
 
 public class Balloon {
     
-    Posn position;
+    static int x = Math.Random();
+    static Posn position = new Posn(x, 0);
+    
+    /// to do: random x position generator, starting position
     
     Balloon(Posn position){
         this.position = position;
     }
     
-    public Boolean hitGroundHuh(){
-        return this.position.y == 800;
+    public static Boolean hitGroundHuh(){
+        return position.y == 800;
     }
     
     public Balloon moveBalloonDown(){
-        Posn downsy = new Posn(position.x, position.y+10);
-        return new Balloon(downsy);
-    }
-    
-    public void removeBalloon(Balloon b){
-        
+        Posn position = new Posn(position.x, position.y+10);
+        return new Balloon(position);
     }
     
 }
