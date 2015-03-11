@@ -3,6 +3,7 @@ import javalib.funworld.*;
 import javalib.worldcanvas.*;
 import javalib.worldimages.*;
 import tester.*;
+import javalib.colors.*;
 
 public class Player {
 
@@ -13,13 +14,17 @@ public class Player {
     }
 
     public Player movePlayerLeft() {
+        if(this.atLeftHuh()){
         position = new Posn(position.x - 5, position.y);
         return new Player(position);
+        } else return this;
     }
 
     public Player movePlayerRight() {
+        if (this.atRightHuh()){
         position = new Posn(position.x + 5, position.y);
         return new Player(position);
+        } else return this;
     }
 
     public Boolean atLeftHuh() {
@@ -31,6 +36,7 @@ public class Player {
     }
 
     public WorldImage drawPlayer() {
-       
+       return new TriangleImage(new Posn(250, 796), new Posn(248, 800),
+               new Posn(252, 800), new Green());
     }
 }

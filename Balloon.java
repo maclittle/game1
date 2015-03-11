@@ -1,27 +1,34 @@
 package game1;
+
 import javalib.funworld.*;
 import javalib.worldcanvas.*;
 import javalib.worldimages.*;
 import tester.*;
+import java.util.Random;
+import javalib.colors.*;
 
 public class Balloon {
-    
-    static int x = Math.Random();
+
+    static Random r = new Random();
+    static int x = r.nextInt();
     static Posn position = new Posn(x, 0);
-    
-    /// to do: random x position generator, starting position
-    
-    Balloon(Posn position){
+
+    Balloon(Posn position) {
         this.position = position;
     }
-    
-    public static Boolean hitGroundHuh(){
+
+    public static Boolean hitGroundHuh() {
         return position.y == 800;
     }
-    
-    public Balloon moveBalloonDown(){
-        Posn position = new Posn(position.x, position.y+10);
-        return new Balloon(position);
+
+    public Balloon moveBalloonDown() {
+        Posn position2 = new Posn(position.x, position.y + 10);
+        return new Balloon(position2);
     }
-    
+
+    public WorldImage drawBalloon() {
+        return new OvalImage(new Posn(this.position.x, this.position.y),
+                5, 7, new Red());
+    }
+
 }

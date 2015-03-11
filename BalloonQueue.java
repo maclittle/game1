@@ -4,6 +4,7 @@ import javalib.funworld.*;
 import javalib.worldcanvas.*;
 import javalib.worldimages.*;
 import tester.*;
+import javalib.colors.*;
 
 public class BalloonQueue implements Queue {
 
@@ -18,9 +19,10 @@ public class BalloonQueue implements Queue {
         this.rest = rest;
     }
 
-//    public boolean isEmpty() {
-//        return this.first == ();
-//    }
+    public boolean isEmpty() {
+        return false;
+    }
+
     public Queue add(Balloon b) {
         if (this.queueSize() <= 3) {
             balloonCount++;
@@ -30,7 +32,7 @@ public class BalloonQueue implements Queue {
         }
     }
 
-    public Queue front() {
+    public Balloon front() {
         return this.first;
     }
 
@@ -39,17 +41,25 @@ public class BalloonQueue implements Queue {
     }
 
     public Queue remove() {
-        for (/*each balloon in the queue, if the dart hits*/ ) {
-            if (Dart.hitBalloonHuh(this)) {
+        if (Dart.hitBalloonHuh(this.first)) {
+            // fix static reference problems
+            try {
                 balloonCount--;
                 return new BalloonQueue(rest.front(), rest.back());
-            } else if (Balloon.hitGroundHuh()) {
+            } catch (EmptyException e) {
+                return new EmptyQueue();
+            }
+        } else if (this.first.hitGroundHuh()) {
+            try {
                 balloonCount--;
                 lives--;
                 return new BalloonQueue(rest.front(), rest.back());
-            } else {
-                return this;
+            } catch (EmptyException e) {
+                return new EmptyQueue();
             }
+        } else {
+            this.rest.remove();
+            return this;
         }
     }
 
@@ -58,17 +68,13 @@ public class BalloonQueue implements Queue {
     }
 
     public Queue moveBalloons() {
-        for (int i = 0; i < this.queueSize(); i++) 
-        /*each balloon in the queue*/{
-            this.moveBalloonDown();
-        }
+        return new BalloonQueue(this.first.moveBalloonDown(),
+                this.rest.moveBalloons());
     }
 
     public WorldImage drawBalloons() {
-        /*each balloon in the queue, draw it at posn, same thing*/
-        for(){
-         new OvalImage(this.position, 5, 7, Color.RED);   
-        }
+        return new OverlayImages(this.first.drawBalloon(),
+                this.rest.drawBalloons());
     }
 
 }

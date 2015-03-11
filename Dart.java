@@ -3,6 +3,7 @@ import javalib.funworld.*;
 import javalib.worldcanvas.*;
 import javalib.worldimages.*;
 import tester.*;
+import javalib.colors.*;
 
 public class Dart {
     
@@ -33,8 +34,13 @@ public class Dart {
     }
     
     public void removeDart(Dart d){
-        if (d.dartHitTopHuh()){
-           
-        }
+        if ((d.dartHitTopHuh()) || d.hitBalloonHuh(this.balloon)){
+           //note to self: figure this out. implement queue for darts?
+        } else return d;
+    }
+    
+    public WorldImage drawDart(){
+        return new RectangleImage(new Posn(this.position.x, this.position.y),
+                1, 4, new White());
     }
 }
