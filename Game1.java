@@ -12,7 +12,8 @@ import java.util.LinkedList;
 public class Game1 extends World {
 
     Player p;
-    Queue bq;
+    Queue mt = new EmptyQueue();
+    Queue bq = new BalloonQueue(new Balloon(), mt, 1);
     LinkedList<Dart> darts;
     int score;
     int lives;
@@ -55,18 +56,24 @@ public class Game1 extends World {
     public World onTick() {
       // if (!endHuh()){
         bq.moveBalloons();
-        bq.add(new Balloon(Balloon.position));
-        bq.remove(darts);
-        bq.drawBalloons();
-        Dart.moveAllDarts(darts);
-        Dart.removeDart(darts, bq);
+        bq.add(new Balloon());
+//        bq.remove(darts);
+//        bq.drawBalloons();
+//        Dart.moveAllDarts(darts);
+//        Dart.removeDart(darts, bq);
+        
+        return new Game1(p,
+                    bq.moveBalloons().remove(darts).add(new Balloon()),//.drawBalloons(),
+                Dart./*removeDart(darts, bq).*/moveAllDarts(darts), this.score, this.lives,
+                    this.worldWidth, this.worldHeight);
       // }
-        return this;
+        //return this;
     }
 
     public Boolean endHuh(){
         return (this.lives == 0);
     }
+    
     
 //    public Game1 endOfWorld(String s) {
 //        if (endHuh()) {
@@ -79,21 +86,32 @@ public class Game1 extends World {
         return new OverlayImages((new RectangleImage(new Posn(250,400),
                 500, 800, new Black())),
                 new OverlayImages((bq.drawBalloons()),
-                (p.drawPlayer())));
-        //return p.drawPlayer();
+                        new OverlayImages((Dart.drawDarts(darts)),
+                (p.drawPlayer()))));
     }
+    
 
     public static void main(String[] args) {
         int width = 500;
         int height = 600;
         Posn pPosition = new Posn(250, height-10);
-
+        int lives = 3;
+        int score = 0;
+        
         Player p = new Player(pPosition);
         Queue mt = new EmptyQueue();
-        Queue bq = new BalloonQueue(new Balloon(Balloon.position), mt);
+        Queue bq = new BalloonQueue(new Balloon(), mt, 1);
         LinkedList<Dart> darts = new LinkedList<Dart>();
         
-        Game1 game = new Game1(p, bq, darts, 0, 0, width, height);
+        if (bq.anyHitGround()) {
+            lives--;
+        }
+        
+        if(Dart.anyHitBalloon(bq, darts)){
+            score++;
+        }
+        
+        Game1 game = new Game1(p, bq, darts, score, lives, width, height);
 
         game.bigBang(width, height, 0.3);
     }

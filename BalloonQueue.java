@@ -13,21 +13,20 @@ public class BalloonQueue implements Queue {
     Queue rest;
 
     int balloonCount = 0;
-    static int lives = 3;
 
-    BalloonQueue(Balloon first, Queue rest) {
+    BalloonQueue(Balloon first, Queue rest, int balloonCount) {
         this.first = first;
         this.rest = rest;
+        this.balloonCount = balloonCount;
     }
 
     public boolean isEmpty() {
         return false;
     }
 
-    public Queue add(Balloon b) {
+    public BalloonQueue add(Balloon b) {
         if (this.queueSize() <= 3) {
-            balloonCount++;
-            return new BalloonQueue(this.first, this.rest.add(b));
+            return new BalloonQueue(this.first, this.rest.add(b), balloonCount++);
         } else {
             return this;
         }
@@ -43,44 +42,44 @@ public class BalloonQueue implements Queue {
 
     public Queue remove(LinkedList<Dart> ds) {
         Queue q = this;
-        try{
-        Dart d = ds.element();
-        while (!q.isEmpty()) {
-            while (!ds.isEmpty()) {
-                if (d.hitBalloonHuh(first)) {
-                    try {
-                        balloonCount--;
-                        return new BalloonQueue(rest.front(), rest.back());
-                    } catch (EmptyException e) {
-                        return new EmptyQueue();
+        try {
+            Dart d = ds.element();
+            while (!q.isEmpty()) {
+                while (!ds.isEmpty()) {
+                    if ((Dart.hitBalloonHuh(first, d)) || (first.hitGroundHuh())) {
+                        try {
+                            return new BalloonQueue(rest.front(), rest.back(),
+                                    balloonCount--);
+                        } catch (EmptyException e) {
+                            return new EmptyQueue();
+                        }
+                    } else {
+                        q = q.back();
+                        return q;
                     }
-                } else if (first.hitGroundHuh()) {
-                    try {
-                        balloonCount--;
-                        lives--;
-                        return new BalloonQueue(rest.front(), rest.back());
-                    } catch (EmptyException e) {
-                        return new EmptyQueue();
-                    }
-                } else {
-                    q = q.back();
-                    return q;
                 }
             }
-        }
-        } catch (java.util.NoSuchElementException e){
+        } catch (java.util.NoSuchElementException e) {
             return q;
         }
         return q;
     }
 
     public int queueSize() {
-        return (1 + rest.queueSize());
+        return balloonCount;
     }
 
-    public Queue moveBalloons() {
+    public Boolean anyHitGround() {
+        if (this.front().hitGroundHuh()) {
+            return true;
+        } else {
+            return this.back().anyHitGround();
+        }
+    }
+
+    public BalloonQueue moveBalloons() {
         return new BalloonQueue(this.first.moveBalloonDown(),
-                this.rest.moveBalloons());
+                this.rest.moveBalloons(), balloonCount);
     }
 
     public WorldImage drawBalloons() {

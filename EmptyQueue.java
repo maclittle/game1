@@ -17,7 +17,7 @@ public class EmptyQueue implements Queue {
         return true;
     }
     public Queue add(Balloon b) {
-        return new BalloonQueue(b, this);
+        return new BalloonQueue(b, this, 1);
     }
 
     public Balloon front() throws EmptyException{
@@ -44,4 +44,8 @@ public class EmptyQueue implements Queue {
         return new CircleImage(new Posn(5,5), 5, new Black());
     }
 
+    public Boolean anyHitGround(){
+        return false;
+    }
+            
 }

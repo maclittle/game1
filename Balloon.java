@@ -10,25 +10,34 @@ import javalib.colors.*;
 public class Balloon {
 
     static Random r = new Random();
-    static int x = r.nextInt();
-    static Posn position = new Posn(x, 0);
+    //static int x = r.nextInt();
+    
+    Posn position; // = new Posn(x, 0);
 
-    Balloon(Posn position) {
-        this.position = position;
+    Balloon() {
+        int x = r.nextInt(500);
+        this.position = new Posn(x, 15);
+    }
+    
+    private Balloon(Posn p) {
+        this.position = p;
     }
 
-    public static Boolean hitGroundHuh() {
-        return position.y == 600;
+    public Boolean hitGroundHuh() {
+        return this.position.y >= 580;
     }
 
     public Balloon moveBalloonDown() {
-        Posn position2 = new Posn(position.x, position.y + 10);
-        return new Balloon(position2);
+        if ((!this.hitGroundHuh())) {
+            Posn position2 = new Posn(this.position.x, this.position.y + 10);
+            return new Balloon(position2);
+        }
+        return this;
     }
 
     public WorldImage drawBalloon() {
-        return new OvalImage(new Posn(this.position.x, this.position.y),
-                5, 7, new Red());
+        return new OvalImage(this.position,
+                35, 40, new Red());
     }
 
 }

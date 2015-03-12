@@ -15,4 +15,5 @@ public interface Queue {
     public int queueSize();
     public Queue moveBalloons();
     public WorldImage drawBalloons();
+    public Boolean anyHitGround();
 }

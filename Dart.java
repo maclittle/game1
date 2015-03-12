@@ -10,7 +10,6 @@ import java.util.LinkedList;
 public class Dart {
 
     Posn position;
-    int score = 0;
     LinkedList<Dart> darts;
 
     Dart(Posn position) {
@@ -19,27 +18,43 @@ public class Dart {
 
     public static LinkedList<Dart> fireDart(LinkedList<Dart> d) {
         Dart fired = new Dart(Player.position);
-        d.addLast(fired);
+        d.addFirst(fired);
         return d;
     }
 
     public Dart moveDartUp() {
-        position = new Posn(position.x, position.y + 10);
+        position = new Posn(position.x, position.y + 15);
         return new Dart(position);
     }
 
-    public static void moveAllDarts(LinkedList<Dart> d) {
+    public static LinkedList<Dart> moveAllDarts(LinkedList<Dart> d) {
         while (!d.isEmpty()) {
             for (int i = 0; i < d.size(); i++) {
                 d.get(i).moveDartUp();
             }
         }
+        return d;
     }
 
-    public Boolean hitBalloonHuh(Balloon b) {
-        score++;
-        return (this.position.x == b.position.x)
-                && (this.position.y == b.position.y);
+    public static Boolean hitBalloonHuh(Balloon b, Dart d) {
+        return (d.position.x == b.position.x)
+                && (d.position.y == b.position.y);
+    }
+
+    public static Boolean anyHitBalloon(Queue bq, LinkedList<Dart> ds) {
+        try {
+            for (Dart d : ds) {
+                while (!bq.isEmpty()) {
+                    if (hitBalloonHuh(bq.front(), d)) {
+                        return true;
+                    } else {
+                        return anyHitBalloon(bq.back(), ds);
+                    }
+                }
+            }
+        } catch (EmptyException e) {
+            return false;
+        } return false;
     }
 
     public Boolean dartHitTopHuh() {
@@ -51,7 +66,8 @@ public class Dart {
             try {
                 Balloon firstBl = bq.front();
                 Dart firstD = ds.element();
-                if ((firstD.dartHitTopHuh()) || firstD.hitBalloonHuh(firstBl)) {
+                if ((firstD.dartHitTopHuh())
+                        || firstD.hitBalloonHuh(firstBl, firstD)) {
                     ds.remove(firstD);
                     bq = bq.back();
                 }
@@ -66,14 +82,16 @@ public class Dart {
 
     public WorldImage drawDart() {
         return new RectangleImage(new Posn(this.position.x, this.position.y),
-                1, 4, new White());
+                2, 6, new White());
     }
 
-    public void drawDarts() {
+    public static WorldImage drawDarts(LinkedList<Dart> darts) {
         while (!darts.isEmpty()) {
-            for (int i = 0; i < darts.size(); i++) {
-                darts.get(i).drawDart();
+            for (Dart d: darts) {
+                return d.drawDart();
             }
         }
+        return new RectangleImage(new Posn(800, 800), 1, 1, new Black());
     }
+
 }

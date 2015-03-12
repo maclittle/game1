@@ -15,25 +15,25 @@ public class Player {
     }
 
     public Player movePlayerLeft() {
-        if(this.atLeftHuh()){
+        if(!this.atLeftHuh()){
         position = new Posn(position.x - 5, position.y);
         return new Player(position);
         } else return this;
     }
 
     public Player movePlayerRight() {
-        if (this.atRightHuh()){
+        if (!this.atRightHuh()){
         position = new Posn(position.x + 5, position.y);
         return new Player(position);
         } else return this;
     }
 
     public Boolean atLeftHuh() {
-        return this.position.x == 0;
+        return this.position.x == 10;
     }
 
     public Boolean atRightHuh() {
-        return this.position.x == 500;
+        return this.position.x == 490;
     }
 
     public  WorldImage drawPlayer() {
