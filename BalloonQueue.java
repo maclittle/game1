@@ -5,6 +5,7 @@ import javalib.worldcanvas.*;
 import javalib.worldimages.*;
 import tester.*;
 import javalib.colors.*;
+import java.util.LinkedList;
 
 public class BalloonQueue implements Queue {
 
@@ -40,27 +41,37 @@ public class BalloonQueue implements Queue {
         return this.rest;
     }
 
-    public Queue remove() {
-        if (Dart.hitBalloonHuh(this.first)) {
-            // fix static reference problems
-            try {
-                balloonCount--;
-                return new BalloonQueue(rest.front(), rest.back());
-            } catch (EmptyException e) {
-                return new EmptyQueue();
+    public Queue remove(LinkedList<Dart> ds) {
+        Queue q = this;
+        try{
+        Dart d = ds.element();
+        while (!q.isEmpty()) {
+            while (!ds.isEmpty()) {
+                if (d.hitBalloonHuh(first)) {
+                    try {
+                        balloonCount--;
+                        return new BalloonQueue(rest.front(), rest.back());
+                    } catch (EmptyException e) {
+                        return new EmptyQueue();
+                    }
+                } else if (first.hitGroundHuh()) {
+                    try {
+                        balloonCount--;
+                        lives--;
+                        return new BalloonQueue(rest.front(), rest.back());
+                    } catch (EmptyException e) {
+                        return new EmptyQueue();
+                    }
+                } else {
+                    q = q.back();
+                    return q;
+                }
             }
-        } else if (this.first.hitGroundHuh()) {
-            try {
-                balloonCount--;
-                lives--;
-                return new BalloonQueue(rest.front(), rest.back());
-            } catch (EmptyException e) {
-                return new EmptyQueue();
-            }
-        } else {
-            this.rest.remove();
-            return this;
         }
+        } catch (java.util.NoSuchElementException e){
+            return q;
+        }
+        return q;
     }
 
     public int queueSize() {

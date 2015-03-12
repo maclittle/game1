@@ -5,6 +5,7 @@ import javalib.worldcanvas.*;
 import javalib.worldimages.*;
 import tester.*;
 import javalib.colors.*;
+import java.util.LinkedList;
 
 
 public class EmptyQueue implements Queue {
@@ -27,7 +28,7 @@ public class EmptyQueue implements Queue {
         return this;
     }
 
-    public Queue remove() {
+    public Queue remove(LinkedList<Dart> d) {
         return this;
     }
 

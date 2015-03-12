@@ -1,4 +1,5 @@
 package game1;
+import java.awt.Color;
 import javalib.funworld.*;
 import javalib.worldcanvas.*;
 import javalib.worldimages.*;
@@ -7,7 +8,7 @@ import javalib.colors.*;
 
 public class Player {
 
-    static Posn position = new Posn(250, 800);
+    static Posn position;
 
     Player(Posn p) {
         this.position = p;
@@ -35,8 +36,7 @@ public class Player {
         return this.position.x == 500;
     }
 
-    public WorldImage drawPlayer() {
-       return new TriangleImage(new Posn(250, 796), new Posn(248, 800),
-               new Posn(252, 800), new Green());
+    public  WorldImage drawPlayer() {
+        return new RectangleImage((this.position), 15, 20, new Green());
     }
 }

@@ -18,7 +18,7 @@ public class Balloon {
     }
 
     public static Boolean hitGroundHuh() {
-        return position.y == 800;
+        return position.y == 600;
     }
 
     public Balloon moveBalloonDown() {
