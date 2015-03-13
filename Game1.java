@@ -8,24 +8,20 @@ import java.util.Random;
 import javalib.colors.*;
 import java.util.LinkedList;
 
-
 public class Game1 extends World {
 
     Player p;
     Queue mt = new EmptyQueue();
     Queue bq = new BalloonQueue(new Balloon(), mt, 1);
-    LinkedList<Dart> darts;
     int score;
     int lives;
     int worldWidth;
     int worldHeight;
-    String endMessage = "GAME OVER. YOUR SCORE WAS: ";
 
-    Game1(Player player, Queue balloonQueue, LinkedList<Dart> darts,
+    Game1(Player player, Queue balloonQueue,
             int score, int lives, int worldWidth, int worldHeight) {
         this.p = player;
         this.bq = balloonQueue;
-        this.darts = darts;
         this.score = score;
         this.lives = lives;
         this.worldWidth = worldWidth;
@@ -33,16 +29,14 @@ public class Game1 extends World {
     }
 
     public Game1 onKeyEvent(String key) {
+        String genKey = randomInput();
         if (key.equals("left")) {
             return new Game1(p.movePlayerLeft(),
-                    bq, darts, this.score, this.lives,
+                    bq, this.score, this.lives,
                     this.worldWidth, this.worldHeight);
         } else if (key.equals("right")) {
             return new Game1(p.movePlayerRight(),
-                    bq, darts, this.score, this.lives,
-                    this.worldWidth, this.worldHeight);
-        } else if (key.equals("space")) {
-            return new Game1(this.p, bq, Dart.fireDart(darts), this.score, this.lives,
+                    bq, this.score, this.lives,
                     this.worldWidth, this.worldHeight);
         } else {
             return this;
@@ -54,64 +48,69 @@ public class Game1 extends World {
     }
 
     public World onTick() {
-      // if (!endHuh()){
-        bq.moveBalloons();
-        bq.add(new Balloon());
-//        bq.remove(darts);
-//        bq.drawBalloons();
-//        Dart.moveAllDarts(darts);
-//        Dart.removeDart(darts, bq);
-        
         return new Game1(p,
-                    bq.moveBalloons().remove(darts).add(new Balloon()),//.drawBalloons(),
-                Dart./*removeDart(darts, bq).*/moveAllDarts(darts), this.score, this.lives,
-                    this.worldWidth, this.worldHeight);
-      // }
-        //return this;
+                bq.moveBalloons().remove().add(new Balloon()),
+               this.score, this.lives,
+                this.worldWidth, this.worldHeight);
     }
 
-    public Boolean endHuh(){
+    public Boolean endHuh() {
         return (this.lives == 0);
     }
-    
-    
-//    public Game1 endOfWorld(String s) {
-//        if (endHuh()) {
-//            return this;
-//            /// IMPLEMENT, change the above
-//        } else return this;
-//    }
 
+    public Game1 endOfWorld() {
+        if (endHuh()) {
+            new Game1(p, bq, 0, 0, 500, 600);
+            new TextImage(new Posn(250, 300),
+                    "GAME OVER. YOUR SCORE WAS: " + score, new White());
+        } return this;
+    }
+   
     public WorldImage makeImage() {
-        return new OverlayImages((new RectangleImage(new Posn(250,400),
+        return new OverlayImages((new RectangleImage(new Posn(250, 400),
                 500, 800, new Black())),
                 new OverlayImages((bq.drawBalloons()),
-                        new OverlayImages((Dart.drawDarts(darts)),
-                (p.drawPlayer()))));
+                                (p.drawPlayer())));
     }
+    
+    public static String randomInput(){
+        String key;
+        Random r = new Random();
+        int rand = r.nextInt(3);
+        switch (rand) {
+            case 0: key = "left";
+                break;
+            case 1: key = "right";
+                break;
+            default: key = "space";
+        }
+        return key;
+    }
+    
+    
+    //TESTS
     
 
     public static void main(String[] args) {
         int width = 500;
         int height = 600;
-        Posn pPosition = new Posn(250, height-10);
+        Posn pPosition = new Posn(250, height - 10);
         int lives = 3;
         int score = 0;
-        
+
         Player p = new Player(pPosition);
         Queue mt = new EmptyQueue();
         Queue bq = new BalloonQueue(new Balloon(), mt, 1);
-        LinkedList<Dart> darts = new LinkedList<Dart>();
-        
-        if (bq.anyHitGround()) {
+
+        if(bq.anyHitPlayer()) {
             lives--;
         }
-        
-        if(Dart.anyHitBalloon(bq, darts)){
+
+        if(bq.anyHitGround()){
             score++;
         }
         
-        Game1 game = new Game1(p, bq, darts, score, lives, width, height);
+        Game1 game = new Game1(p, bq, score, lives, width, height);
 
         game.bigBang(width, height, 0.3);
     }

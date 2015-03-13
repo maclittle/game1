@@ -25,8 +25,8 @@ public class BalloonQueue implements Queue {
     }
 
     public BalloonQueue add(Balloon b) {
-        if (this.queueSize() <= 3) {
-            return new BalloonQueue(this.first, this.rest.add(b), balloonCount++);
+        if (this.queueSize() <= 15) {
+            return new BalloonQueue(this.first, this.rest.add(b), balloonCount + 1);
         } else {
             return this;
         }
@@ -40,27 +40,20 @@ public class BalloonQueue implements Queue {
         return this.rest;
     }
 
-    public Queue remove(LinkedList<Dart> ds) {
+    public Queue remove() {
         Queue q = this;
-        try {
-            Dart d = ds.element();
-            while (!q.isEmpty()) {
-                while (!ds.isEmpty()) {
-                    if ((Dart.hitBalloonHuh(first, d)) || (first.hitGroundHuh())) {
-                        try {
-                            return new BalloonQueue(rest.front(), rest.back(),
-                                    balloonCount--);
-                        } catch (EmptyException e) {
-                            return new EmptyQueue();
-                        }
-                    } else {
-                        q = q.back();
-                        return q;
-                    }
+        while (!q.isEmpty()) {
+
+            if ((Balloon.balloonHitPlayerHuh(first)) || (first.hitGroundHuh())) {
+                try {
+                    return new BalloonQueue(rest.front(), rest.back(),
+                            balloonCount - 1);
+                } catch (EmptyException e) {
+                    return new EmptyQueue();
                 }
+            } else {
+                return q;
             }
-        } catch (java.util.NoSuchElementException e) {
-            return q;
         }
         return q;
     }
@@ -85,6 +78,15 @@ public class BalloonQueue implements Queue {
     public WorldImage drawBalloons() {
         return new OverlayImages(this.first.drawBalloon(),
                 this.rest.drawBalloons());
+    }
+
+    public Boolean anyHitPlayer() {
+        Queue q = this;
+        if (Balloon.balloonHitPlayerHuh(first)) {
+            return true;
+        } else {
+            return q.back().anyHitPlayer();
+        }
     }
 
 }

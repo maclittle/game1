@@ -10,9 +10,8 @@ import javalib.colors.*;
 public class Balloon {
 
     static Random r = new Random();
-    //static int x = r.nextInt();
     
-    Posn position; // = new Posn(x, 0);
+    Posn position;
 
     Balloon() {
         int x = r.nextInt(500);
@@ -29,7 +28,7 @@ public class Balloon {
 
     public Balloon moveBalloonDown() {
         if ((!this.hitGroundHuh())) {
-            Posn position2 = new Posn(this.position.x, this.position.y + 10);
+            Posn position2 = new Posn(this.position.x, this.position.y + 30);
             return new Balloon(position2);
         }
         return this;
@@ -38,6 +37,13 @@ public class Balloon {
     public WorldImage drawBalloon() {
         return new OvalImage(this.position,
                 35, 40, new Red());
+    }
+    
+    public static Boolean balloonHitPlayerHuh(Balloon b){
+        return ((b.position.x+5)<=Player.position.x-3 &&
+               Player.position.x+3<=(b.position.x-5)) &&
+                (Player.position.y+10<=(b.position.y+5));
+        
     }
 
 }

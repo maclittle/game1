@@ -28,7 +28,7 @@ public class EmptyQueue implements Queue {
         return this;
     }
 
-    public Queue remove(LinkedList<Dart> d) {
+    public Queue remove() {
         return this;
     }
 
@@ -45,6 +45,10 @@ public class EmptyQueue implements Queue {
     }
 
     public Boolean anyHitGround(){
+        return false;
+    }
+    
+    public Boolean anyHitPlayer(){
         return false;
     }
             
