@@ -18,12 +18,12 @@ public class Balloon {
         this.position = new Posn(x, 15);
     }
     
-    private Balloon(Posn p) {
+    Balloon(Posn p) {
         this.position = p;
     }
 
     public Boolean hitGroundHuh() {
-        return this.position.y >= 580;
+        return this.position.y >= 590;
     }
 
     public Balloon moveBalloonDown() {
@@ -39,11 +39,18 @@ public class Balloon {
                 35, 40, new Red());
     }
     
+    
     public static Boolean balloonHitPlayerHuh(Balloon b){
-        return ((b.position.x+5)<=Player.position.x-3 &&
-               Player.position.x+3<=(b.position.x-5)) &&
-                (Player.position.y+10<=(b.position.y+5));
+        int bLeft = b.position.x-20;
+        int bRight = b.position.x+20;
+        int bBot = b.position.y;
+        int pTop = Player.position.y;
+        int pLeft = Player.position.x-10;
+        int pRight = Player.position.x+10;
         
+        return ((bRight>=pLeft) &&
+               (bLeft<=pRight)) &&
+               (bBot>= 585);
     }
 
 }

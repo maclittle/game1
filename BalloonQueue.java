@@ -63,10 +63,10 @@ public class BalloonQueue implements Queue {
     }
 
     public Boolean anyHitGround() {
-        if (this.front().hitGroundHuh()) {
+        if (this.first.hitGroundHuh()) {
             return true;
         } else {
-            return this.back().anyHitGround();
+            return this.rest.anyHitGround();
         }
     }
 

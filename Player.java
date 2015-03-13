@@ -16,14 +16,14 @@ public class Player {
 
     public Player movePlayerLeft() {
         if(!this.atLeftHuh()){
-        position = new Posn(position.x - 7, position.y);
+        position = new Posn(position.x - 5, position.y);
         return new Player(position);
         } else return this;
     }
 
     public Player movePlayerRight() {
         if (!this.atRightHuh()){
-        position = new Posn(position.x + 7, position.y);
+        position = new Posn(position.x + 5, position.y);
         return new Player(position);
         } else return this;
     }
